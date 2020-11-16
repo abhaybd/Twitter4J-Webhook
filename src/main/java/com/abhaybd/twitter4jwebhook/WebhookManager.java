@@ -51,6 +51,11 @@ public class WebhookManager {
         mapper = new ObjectMapper();
     }
 
+    /**
+     * Get information about the webhook registered for the current environment.
+     *
+     * @return The webhook information for the current dev environment. Null if no webhook is registered.
+     */
     public WebhookInfo getWebhookInfo() {
         try {
             // Send a GET request to the API endpoint
@@ -67,6 +72,11 @@ public class WebhookManager {
         }
     }
 
+    /**
+     * Triggers a CRC check on the registered webhook. Fails automatically if no webhook is registered.
+     *
+     * @return The {@link StatusCode} representing the success or failure.
+     */
     public StatusCode triggerCRC() {
         try {
             WebhookInfo info = getWebhookInfo();
@@ -84,6 +94,12 @@ public class WebhookManager {
         }
     }
 
+    /**
+     * Register a webhook pointing to the given url. This url must also be able to respond to CRC checks.
+     *
+     * @param uri The address of the webhook.
+     * @return The {@link StatusCode} representing the success or failure.
+     */
     public StatusCode addWebhook(URI uri) {
         try {
             // Send a POST request to the API endpoint
@@ -109,6 +125,11 @@ public class WebhookManager {
         }
     }
 
+    /**
+     * Registers the currently authenticated user to this webhook. Fails automatically if no webhook is registered.
+     *
+     * @return The {@link StatusCode} representing the success or failure.
+     */
     public StatusCode registerCurrentUser() {
         String endpoint = String.format(SUBSCRIPTIONS_ENDPOINT, env);
         HttpPost request = new HttpPost(endpoint);
@@ -121,6 +142,11 @@ public class WebhookManager {
         }
     }
 
+    /**
+     * Removes the currently registered webhook. Succeeds automatically if no webhook is registered.
+     *
+     * @return The {@link StatusCode} representing the success or failure.
+     */
     public StatusCode removeWebhook() {
         try {
             // Check if a webhook exists and get its id
@@ -141,6 +167,11 @@ public class WebhookManager {
         }
     }
 
+    /**
+     * Unsubscribes all users from the currently registered webhook. Succeeds automatically if no webhook is registered.
+     *
+     * @return The {@link StatusCode} representing the success or failure.
+     */
     public StatusCode unregisterAllUsers() {
         try {
             String endpoint = String.format(LIST_SUBSCRIPTIONS_ENDPOINT, env);
@@ -161,6 +192,11 @@ public class WebhookManager {
         }
     }
 
+    /**
+     * Unsubscribes the authenticated user from the currently registered webhook.
+     *
+     * @return The {@link StatusCode} representing the success or failure.
+     */
     public StatusCode unregisterUser(long id) {
         try {
             String endpoint = String.format(UNSUBSCRIBE_ENDPOINT, env, id);
